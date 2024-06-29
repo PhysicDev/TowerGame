@@ -1,0 +1,11 @@
+RED
+Tower 400 300 RED
+Tower 250 400 null
+Tower 550 400 null
+Tower 250 200 null
+Tower 550 200 null
+Tower 100 500 BLUE
+Tower 700 500 BLUE
+Tower 100 100 BLUE
+Tower 700 100 BLUE
+StoopidBot BLUE
