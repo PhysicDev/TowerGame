@@ -1,11 +1,11 @@
 RED
-Tower 400 300 RED
-Tower 250 400 null
-Tower 550 400 null
-Tower 250 200 null
-Tower 550 200 null
-Tower 100 500 BLUE
-Tower 700 500 BLUE
-Tower 100 100 BLUE
-Tower 700 100 BLUE
+Tower 960 540 RED
+Tower 580 680 null
+Tower 1340 680 null
+Tower 580 360 null
+Tower 1340 360 null
+Tower 200 880 BLUE
+Tower 1720 880 BLUE
+Tower 200 200 BLUE
+Tower 1720 200 BLUE
 StoopidBot BLUE
