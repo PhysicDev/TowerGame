@@ -1,15 +1,16 @@
 package tower;
 
-import java.awt.BorderLayout;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.DisplayMode;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -19,27 +20,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.plaf.basic.BasicBorders.ButtonBorder;
 
-import tge.BackgroundPanel;
 import tge.BasicListener;
 import tge.Drawable;
 import tge.Sim;
 import tge.Updatable;
 import tge.Utilities;
+import tge.object.BackgroundPanel;
 
 public class Game extends Sim{
 
@@ -76,6 +72,9 @@ public class Game extends Sim{
 	
 	public static void main(String... args) {
 		
+		
+		
+		
 		//creating game instance
 		Game g=new Game();
 		BasicListener bl=new BasicListener();
@@ -89,11 +88,12 @@ public class Game extends Sim{
 		Unit.tlist=g.towers;
 		Unit.game=g;
 		
-		Game.FrameLimiterLogic=60;
+		Game.FrameLimiterLogic=120;
 		Game.FrameLimiterGraphic=60;
 		
 		System.out.println("starting game...");
 		JFrame dat=g.setupFrame();
+		dat.setSize(1920,1080);
 		dat.setResizable(false);
 		
 		BufferedImage favicon=null;
@@ -149,9 +149,6 @@ public class Game extends Sim{
 		try {
 			Background = ImageIO.read(new File("images//assets//background.png"));
 		} catch (IOException e) {e.printStackTrace();}
-		try {
-			Background = ImageIO.read(new File("images//assets//background.png"));
-		} catch (IOException e) {e.printStackTrace();}
 		
 		//load level list
 		loadFile();
@@ -159,15 +156,15 @@ public class Game extends Sim{
 		//creating menus:
 		
 		//main menu
-		JPanel main=new BackgroundPanel("./images/assets/title2.png");
+		JPanel main=new BackgroundPanel("./images/assets/title3.png");
 		JButton play=simpleButton("");
 		
 		//panel
 		main.setLayout(new GridBagLayout());
 		
 		//button play
-		play.setPreferredSize(new Dimension(50,50));
-		play.setSize(new Dimension(50,50));
+		play.setPreferredSize(new Dimension(100,100));
+		play.setSize(new Dimension(100,100));
 		play.setContentAreaFilled(false);
 		BufferedImage Picon=null;
 		try {
@@ -215,12 +212,12 @@ public class Game extends Sim{
 		this.setLayout(null);
 		this.add(miniScreen);
 
-		next.setSize(new Dimension(50,50));
-		next.setPreferredSize(new Dimension(50,50));
+		next.setSize(new Dimension(100,100));
+		next.setPreferredSize(new Dimension(100,100));
 		next.setContentAreaFilled(false);
 		Utilities.addHighlight(next);
-		replay.setSize(new Dimension(50,50));
-		replay.setPreferredSize(new Dimension(50,50));
+		replay.setSize(new Dimension(100,100));
+		replay.setPreferredSize(new Dimension(100,100));
 		replay.setContentAreaFilled(false);
 		Utilities.addHighlight(replay);
 		
@@ -255,7 +252,7 @@ public class Game extends Sim{
 		
 		gbc = new GridBagConstraints();
 	    gbc.fill = GridBagConstraints.NONE; 
-	    gbc.insets = new Insets(5,10,5,10);
+	    gbc.insets = new Insets(10,20,10,20);
 	    gbc.anchor = GridBagConstraints.CENTER;
 	    
 	    gbc.gridx = 0;
@@ -264,11 +261,11 @@ public class Game extends Sim{
 		
 		gbc.gridx = 1;
 		miniScreen.add(next, gbc);
-		miniScreen.setPreferredSize(new Dimension(150,120));
+		miniScreen.setPreferredSize(new Dimension(300,240));
 		
 		
 		JLabel text=new JLabel("test text");
-		text.setFont(mainfont.deriveFont(24f));
+		text.setFont(mainfont.deriveFont(48f));
 		text.setForeground(Color.WHITE);
 		gbc.gridy=0;
 		gbc.gridx=0;
@@ -279,7 +276,7 @@ public class Game extends Sim{
 		nextMenu=miniScreen;
 		nextMenu.setVisible(false);
 		//final Screen
-		JPanel credit=new BackgroundPanel("./images/assets/credit.png");
+		JPanel credit=new BackgroundPanel("./images/assets/credit2.png");
 		addMenu(credit,"credit");
 	}
 	
@@ -402,7 +399,7 @@ public class Game extends Sim{
 		if(state==Game.END_GAME_LOSE)
 			nextMenu.getComponent(1).setVisible(false);
 		((JLabel)nextMenu.getComponent(2)).setText("you "+(state==Game.END_GAME_LOSE?"lose...":"win !!"));
-		nextMenu.setBounds((this.getWidth()-150)/2,(this.getHeight()-80)/2,150,120);
+		nextMenu.setBounds((this.getWidth()-300)/2,(this.getHeight()-240)/2,300,240);
 	}
 	
 	@Override
@@ -415,8 +412,16 @@ public class Game extends Sim{
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.setFont(mainfont.deriveFont(15f));
-		g.drawImage(Background, 0,0,800,600,null);
+		
+		 Graphics2D g2 = (Graphics2D)g;
+		    
+		    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	        g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+	        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	        
+		    g2.setStroke(new BasicStroke(3));
+		g.setFont(mainfont.deriveFont(30f));
+		g.drawImage(Background, 0,0,this.getWidth(),this.getHeight(),null);
 		//this.frameDebug(g);
 		for(Drawable asset:Slayer)
 			asset.draw(g);

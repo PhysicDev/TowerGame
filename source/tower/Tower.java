@@ -1,7 +1,10 @@
 package tower;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -17,14 +20,14 @@ import tge.Utilities;
 
 public class Tower implements Updatable {
 
-	public static final int sizeX = 32;
-	public static final int sizeY = 64;
+	public static final int sizeX = 64;
+	public static final int sizeY = 128;
 	
 	private double X;
 	private double Y;
 	private Color team;
 	
-	private double Income=0.025;
+	private double Income=0.01;
 	private double Ressources=0;
 	private double maxRessources=30;
 	public static BasicListener listener;
@@ -72,14 +75,25 @@ public class Tower implements Updatable {
 
 	@Override
 	public void draw(Graphics g) {
+
+		 Graphics2D g2 = (Graphics2D)g;
+		    
+		    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	        g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+	        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	        
+		    g2.setStroke(new BasicStroke(3));
+		g.setColor(Color.BLACK);
+		if(selected())
+			g.drawLine((int)X, (int)Y-sizeY/2, game.getMX(), game.getMY());
+		g.drawString((int)Ressources+"",(int) (X-sizeX/2), (int)(Y-sizeY-3));
+		
 		g.setColor(team);
 		//g.fillRect((int)(X-sizeX/2), (int)(Y)-sizeY, sizeX, sizeY);
-		g.drawImage(team==null?EmptyMask:TowerMask.get(team),(int)X-sizeX/2,(int)Y-sizeY, sizeX,sizeY, null);
-		g.drawImage(TowerTexture,(int)X-sizeX/2,(int)Y-sizeY, sizeX,sizeY, null);
-		g.setColor(Color.BLACK);
-		g.drawString((int)Ressources+"",(int) (X-sizeX/2), (int)(Y-sizeY-3));
-		if(selected())
-			g.drawLine((int)X, (int)Y, game.getMX(), game.getMY());
+		g.drawImage(team==null?EmptyMask:TowerMask.get(team),(int)X-sizeX,(int)Y-sizeY, sizeX*2,sizeY, null);
+		g.drawImage(TowerTexture,(int)X-sizeX,(int)Y-sizeY, sizeX*2,sizeY, null);
+		
+		g.fillRect((int)X-sizeX/2,(int)Y+5, (int) (Math.min(Ressources/maxRessources,1)*sizeX),5);
 	}
 	
 	private boolean selected() {
@@ -92,21 +106,6 @@ public class Tower implements Updatable {
 			if(selected) {
 				for(Tower t:game.towers) {
 					if(t.collide(listener.getRX(), listener.getRY())) {
-						/**
-						if(t==this)
-							continue;
-						//event attack
-						
-						int units=(int) (prop*Ressources);
-						
-						System.out.println("attack from tower : "+this.toString());
-						System.out.println("         to tower : "+t.toString());
-						for(int i=0;i<units;i++) {
-							Unit u=new Unit(X+R.nextDouble()*2-1,Y+R.nextDouble()*2-1, team);
-							u.setObjective(t.X+(R.nextDouble()-0.5)*sizeX/8,t.Y-R.nextDouble()*sizeY/4);
-							game.addObject(u);
-						}
-						Ressources-=units;**/
 						this.attack(t);
 					}
 				}

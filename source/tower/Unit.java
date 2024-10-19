@@ -23,10 +23,10 @@ public class Unit implements Updatable {
 	private double Yobj;
 	
 
-	public static final int size = 16;
+	public static final int size = 32;
 	
 	//constant
-	public static final double timeStep=1d/60d;
+	public static final double timeStep=1d/120d;
 	private static final double immuneTime=2;
 	private static final int immuneStep=(int) (immuneTime/timeStep);
 	
@@ -45,8 +45,8 @@ public class Unit implements Updatable {
 	private Color team;
 	
 	//semi constant (is constant for the instance but vary from instance to instance)
-	public double maxSpeed=150;
-	public double maxAcc=50;
+	public double maxSpeed=300;
+	public double maxAcc=100;
 	public double maxAngAcc=Math.PI*5/4;
 	
 	//random
